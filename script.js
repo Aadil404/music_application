@@ -7,7 +7,7 @@ let songs;
 
 async function getSongs(folder){
     currFolder=folder;
-    let a=await fetch(`http://192.168.31.119:3000/Spotify_Clone/${currFolder}/`)  //fetch all songs from songs folder
+    let a=await fetch(`http://192.168.31.119:3000/${currFolder}/`)  //fetch all songs from songs folder
     let response=await a.text();                                          //this will contain songs folder info in form of text(html format)
     let div=document.createElement('div')
     div.innerHTML=response                               
@@ -29,14 +29,14 @@ async function getSongs(folder){
     songUL.innerHTML=""
     //list all songs in libarary
     for (const song of songs) {
-        songUL.innerHTML=songUL.innerHTML + `<li><img class="invert" src="music.svg" alt="">
+        songUL.innerHTML=songUL.innerHTML + `<li><img class="invert" src="/svgs/music.svg" alt="">
         <div class="songinfo">
             <div>${song}</div>
             <div>Adil</div>
         </div>
         <div class="playnow">
             <span>Play now</span>
-            <img class="invert" src="play2.svg" alt="">
+            <img class="invert" src="/svgs/play2.svg" alt="">
         </div></li>`;
     }             
 
@@ -53,20 +53,20 @@ async function getSongs(folder){
 
 let play=document.querySelector(".play")  //it is playsong button
 const playMusic = (track,pause=false)=>{
-    // let audio=new Audio("/Spotify_Clone/songs/" + track);  //i add extar string to make the url of songs, other wise it is showing not found
-    currentSong.src=`/Spotify_Clone/${currFolder}/` + track
+    // let audio=new Audio("/songs/" + track);  //i add extar string to make the url of songs, other wise it is showing not found
+    currentSong.src=`${currFolder}/` + track
     
     //first song of the playlist is always loaded to play without clicking on it
     if(!pause){
         currentSong.play();
-        play.src="pausesong.svg"  //change the logo
+        play.src="/svgs/pausesong.svg"  //change the logo
     }
     document.querySelector(".songname").innerHTML=track;
     document.querySelector(".songtime").innerHTML="00:00/00:00";
 }
 
 async function displayAlbums(){
-    let a=await fetch(`http://192.168.31.119:3000/Spotify_Clone/songs/`) 
+    let a=await fetch(`http://192.168.31.119:3000/songs/`) 
     let response=await a.text();                                        
     let div=document.createElement('div')
     div.innerHTML=response   
@@ -79,11 +79,11 @@ async function displayAlbums(){
         if(e.href.includes("/songs")){
             let parts = e.href.split("/");     
             let fileName = parts[parts.length - 2];
-            let a=await fetch(`http://192.168.31.119:3000/Spotify_Clone/songs/${fileName}/info.json`) 
+            let a=await fetch(`http://192.168.31.119:3000/songs/${fileName}/info.json`) 
             let response=await a.json();  
             cardContainer.innerHTML = cardContainer.innerHTML + `<div class="card">
                 <div class="playbutton">
-                    <img src="play.svg" alt="">
+                    <img src="/svgs/play.svg" alt="">
                 </div>
                 <img src="songs/${fileName}/cover.jpeg" alt="">
                 <h2>${response.title}</h2>
@@ -122,10 +122,10 @@ async function main(){
     play.addEventListener("click",()=>{
         if(currentSong.paused){
             currentSong.play()
-            play.src="pausesong.svg"
+            play.src="/svgs/pausesong.svg"
         }else{
             currentSong.pause()
-            play.src="playsong.svg"
+            play.src="/svgs/playsong.svg"
         }
     })
 
@@ -189,13 +189,13 @@ async function main(){
 
     //add event listner to mute the volume
     document.querySelector(".volume img").addEventListener("click",(e)=>{
-        if(e.target.src.includes("volume.svg")){
-            e.target.src=e.target.src.replace("volume.svg","mute.svg");
+        if(e.target.src.includes("/svgs/volume.svg")){
+            e.target.src=e.target.src.replace("/svgs/volume.svg","/svgs/mute.svg");
             currentSong.volume=0;
             document.querySelector(".volume").getElementsByTagName("input")[0].value=0;
 
         }else{
-            e.target.src=e.target.src.replace("mute.svg","volume.svg");
+            e.target.src=e.target.src.replace("/svgs/mute.svg","/svgs/volume.svg");
             currentSong.volume=.25;
             document.querySelector(".volume").getElementsByTagName("input")[0].value=25;
         }
