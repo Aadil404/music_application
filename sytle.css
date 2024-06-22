@@ -96,8 +96,9 @@ body{
 
 .footer{
     display: flex;
-    font-size: 10px;
+    font-size: 15px;
     gap: 10px;
+    color: #858484;
     flex-wrap: wrap;
     position: absolute;
     bottom: 0;
